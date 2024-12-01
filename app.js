@@ -25,29 +25,36 @@ const githubToken = "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"; // Replace with 
 // Upload form handling
 const uploadForm = document.getElementById("uploadForm");
 const fileInput = document.getElementById("fileInput");
+const coverInput = document.getElementById("coverInput"); // Cover image input
 const statusDiv = document.getElementById("status");
 
 uploadForm.addEventListener("submit", async (event) => {
   event.preventDefault();
 
   const file = fileInput.files[0];
-  if (!file) return;
+  const coverFile = coverInput.files[0]; // Get cover file
+  if (!file || !coverFile) return;
 
   statusDiv.textContent = "Uploading to Firebase...";
 
-  // Upload file to Firebase Storage
-  const storageRef = ref(storage, `uploads/${file.name}`);
-  await uploadBytes(storageRef, file);
-  const fileURL = await getDownloadURL(storageRef);
+  // Upload book file to Firebase Storage
+  const bookStorageRef = ref(storage, `library/files/books/${file.name}`);
+  await uploadBytes(bookStorageRef, file);
+  const bookFileURL = await getDownloadURL(bookStorageRef);
 
-  statusDiv.textContent = "File uploaded to Firebase. Saving details to Firestore...";
+  // Upload cover file to Firebase Storage
+  const coverStorageRef = ref(storage, `library/files/covers/${coverFile.name}`);
+  await uploadBytes(coverStorageRef, coverFile);
+  const coverFileURL = await getDownloadURL(coverStorageRef);
+
+  statusDiv.textContent = "Files uploaded to Firebase. Saving details to Firestore...";
 
   // Define the book details
   const bookDetails = {
     author: document.getElementById("author").value,
     bookNo: parseInt(document.getElementById("bookNo").value),
-    coverSrc: document.getElementById("coverSrc").value,
-    fileLink: fileURL, // Firebase file link
+    coverSrc: coverFileURL, // Firebase cover image URL
+    fileLink: bookFileURL,   // Firebase book file link
     language: document.getElementById("language").value,
     subTitle: document.getElementById("subTitle").value,
     title: document.getElementById("title").value,
@@ -58,10 +65,14 @@ uploadForm.addEventListener("submit", async (event) => {
     const docRef = await addDoc(collection(db, "Books"), bookDetails);
     statusDiv.textContent = "Book details successfully saved to Firestore!";
 
-    // Upload file to GitHub
-    const base64File = await convertFileToBase64(file);
-    await uploadFileToGitHub(file.name, base64File);
-    statusDiv.textContent += " The file has been uploaded to GitHub.";
+    // Upload book and cover file to GitHub
+    const bookBase64 = await convertFileToBase64(file);
+    const coverBase64 = await convertFileToBase64(coverFile);
+    
+    await uploadFileToGitHub(file.name, bookBase64, "Files/Books/");
+    await uploadFileToGitHub(coverFile.name, coverBase64, "Files/Covers/");
+
+    statusDiv.textContent += " The book and cover files have been uploaded to GitHub.";
 
   } catch (error) {
     statusDiv.textContent = `Error: ${error.message}`;
@@ -79,13 +90,13 @@ function convertFileToBase64(file) {
 }
 
 // Function to upload file to GitHub repository
-async function uploadFileToGitHub(fileName, base64File) {
+async function uploadFileToGitHub(fileName, base64File, folderPath) {
   const content = {
     message: `Upload ${fileName}`,
     content: base64File,
   };
 
-  const response = await fetch(githubRepo + "Files/Books/" + fileName, {
+  const response = await fetch(githubRepo + folderPath + fileName, {
     method: "PUT",
     headers: {
       "Authorization": `Bearer ${githubToken}`,

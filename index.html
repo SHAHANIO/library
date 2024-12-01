@@ -8,7 +8,7 @@
 <body>
   <h1>Upload Book Details</h1>
   
-  <!-- Form to upload file and enter book details -->
+  <!-- Form to upload book and cover file -->
   <form id="uploadForm" enctype="multipart/form-data">
     <label for="title">Book Title:</label>
     <input type="text" id="title" name="title" placeholder="Enter book title" required><br><br>
@@ -22,8 +22,8 @@
     <label for="language">Language:</label>
     <input type="text" id="language" name="language" placeholder="Enter language" required><br><br>
 
-    <label for="coverSrc">Cover Image URL:</label>
-    <input type="url" id="coverSrc" name="coverSrc" placeholder="Enter cover image URL" required><br><br>
+    <label for="coverInput">Cover Image:</label>
+    <input type="file" id="coverInput" name="coverInput" accept="image/*" required><br><br>
 
     <label for="fileInput">Upload Book File:</label>
     <input type="file" id="fileInput" name="fileInput" accept=".pdf" required><br><br>
