@@ -1,0 +1,27 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+  }
+  
+  header {
+    background-color: #4CAF50;
+    color: white;
+    padding: 1em 0;
+  }
+  
+  main {
+    margin: 2em;
+  }
+  
+  form {
+    display: inline-block;
+    margin-top: 2em;
+  }
+  
+  #status {
+    margin-top: 1em;
+    font-weight: bold;
+  }
+  
