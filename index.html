@@ -3,21 +3,41 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Library Website</title>
-  <link rel="stylesheet" href="style.css">
-  <script type="module" src="app.js" defer></script>
+  <title>Library Upload</title>
 </head>
 <body>
-  <header>
-    <h1>Library Website</h1>
-  </header>
-  <main>
-    <form id="uploadForm">
-      <label for="fileInput">Choose a file to upload:</label>
-      <input type="file" id="fileInput" required />
-      <button type="submit">Upload</button>
-    </form>
-    <div id="status"></div>
-  </main>
+  <h1>Upload Book Details</h1>
+  
+  <!-- Form to upload file and enter book details -->
+  <form id="uploadForm" enctype="multipart/form-data">
+    <label for="title">Book Title:</label>
+    <input type="text" id="title" name="title" placeholder="Enter book title" required><br><br>
+
+    <label for="subTitle">Subtitle:</label>
+    <input type="text" id="subTitle" name="subTitle" placeholder="Enter subtitle" required><br><br>
+
+    <label for="author">Author:</label>
+    <input type="text" id="author" name="author" placeholder="Enter author name" required><br><br>
+
+    <label for="language">Language:</label>
+    <input type="text" id="language" name="language" placeholder="Enter language" required><br><br>
+
+    <label for="coverSrc">Cover Image URL:</label>
+    <input type="url" id="coverSrc" name="coverSrc" placeholder="Enter cover image URL" required><br><br>
+
+    <label for="fileInput">Upload Book File:</label>
+    <input type="file" id="fileInput" name="fileInput" accept=".pdf" required><br><br>
+
+    <label for="bookNo">Book Number:</label>
+    <input type="number" id="bookNo" name="bookNo" placeholder="Enter book number" required><br><br>
+
+    <!-- Submit Button -->
+    <button type="submit">Upload Book</button>
+  </form>
+
+  <!-- Status Div to show upload process -->
+  <div id="status"></div>
+
+  <script src="app.js"></script> <!-- External JavaScript File -->
 </body>
 </html>
